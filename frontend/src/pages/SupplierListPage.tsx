@@ -1,5 +1,15 @@
 import { useState } from 'react'
-import { Box, Container, Stack, TextField, Typography } from '@mui/material'
+import {
+  Box,
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
 import SupplierCard from '../components/SupplierCard'
 
 // Temporary frontend-only data used while developing the page.
@@ -28,14 +38,19 @@ const sampleSuppliers = [
 
 function SupplierListPage() {
   const [searchText, setSearchText] = useState('')
+  const [selectedType, setSelectedType] = useState('All')
 
   const normalizedSearch = searchText.toLowerCase()
   const filteredSuppliers = sampleSuppliers.filter((supplier) => {
-    return (
+    const matchesSearch =
       supplier.name.toLowerCase().includes(normalizedSearch) ||
       supplier.type.toLowerCase().includes(normalizedSearch) ||
       supplier.location.toLowerCase().includes(normalizedSearch)
-    )
+
+    const matchesType =
+      selectedType === 'All' || supplier.type === selectedType
+
+    return matchesSearch && matchesType
   })
 
   return (
@@ -55,8 +70,19 @@ function SupplierListPage() {
           sx={{ maxWidth: 480 }}
         />
 
-        {/* Reserved space for Filter and Sort controls later. */}
-        <Box aria-label="Future filter and sort controls" sx={{ minHeight: 40 }} />
+        <FormControl fullWidth sx={{ maxWidth: 240 }}>
+          <InputLabel id="supplier-type-label">Supplier type</InputLabel>
+          <Select
+            labelId="supplier-type-label"
+            value={selectedType}
+            label="Supplier type"
+            onChange={(event) => setSelectedType(event.target.value)}
+          >
+            <MenuItem value="All">All</MenuItem>
+            <MenuItem value="Food">Food</MenuItem>
+            <MenuItem value="Printing">Printing</MenuItem>
+          </Select>
+        </FormControl>
 
         <Box aria-label="Supplier results" sx={{ minHeight: { xs: 320, md: 480 } }}>
           <Stack spacing={{ xs: 2, md: 3 }}>
