@@ -39,6 +39,7 @@ const sampleSuppliers = [
 function SupplierListPage() {
   const [searchText, setSearchText] = useState('')
   const [selectedType, setSelectedType] = useState('All')
+  const [selectedSort, setSelectedSort] = useState('name-asc')
 
   const normalizedSearch = searchText.toLowerCase()
   const filteredSuppliers = sampleSuppliers.filter((supplier) => {
@@ -51,6 +52,14 @@ function SupplierListPage() {
       selectedType === 'All' || supplier.type === selectedType
 
     return matchesSearch && matchesType
+  })
+
+  const sortedSuppliers = [...filteredSuppliers].sort((first, second) => {
+    if (selectedSort === 'name-desc') {
+      return second.name.localeCompare(first.name)
+    }
+
+    return first.name.localeCompare(second.name)
   })
 
   return (
@@ -70,24 +79,39 @@ function SupplierListPage() {
           sx={{ maxWidth: 480 }}
         />
 
-        <FormControl fullWidth sx={{ maxWidth: 240 }}>
-          <InputLabel id="supplier-type-label">Supplier type</InputLabel>
-          <Select
-            labelId="supplier-type-label"
-            value={selectedType}
-            label="Supplier type"
-            onChange={(event) => setSelectedType(event.target.value)}
-          >
-            <MenuItem value="All">All</MenuItem>
-            <MenuItem value="Food">Food</MenuItem>
-            <MenuItem value="Printing">Printing</MenuItem>
-          </Select>
-        </FormControl>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <FormControl fullWidth sx={{ maxWidth: 240 }}>
+            <InputLabel id="supplier-type-label">Supplier type</InputLabel>
+            <Select
+              labelId="supplier-type-label"
+              value={selectedType}
+              label="Supplier type"
+              onChange={(event) => setSelectedType(event.target.value)}
+            >
+              <MenuItem value="All">All</MenuItem>
+              <MenuItem value="Food">Food</MenuItem>
+              <MenuItem value="Printing">Printing</MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth sx={{ maxWidth: 240 }}>
+            <InputLabel id="supplier-sort-label">Sort by</InputLabel>
+            <Select
+              labelId="supplier-sort-label"
+              value={selectedSort}
+              label="Sort by"
+              onChange={(event) => setSelectedSort(event.target.value)}
+            >
+              <MenuItem value="name-asc">Name A-Z</MenuItem>
+              <MenuItem value="name-desc">Name Z-A</MenuItem>
+            </Select>
+          </FormControl>
+        </Stack>
 
         <Box aria-label="Supplier results" sx={{ minHeight: { xs: 320, md: 480 } }}>
           <Stack spacing={{ xs: 2, md: 3 }}>
-            {filteredSuppliers.length > 0 ? (
-              filteredSuppliers.map((supplier) => (
+            {sortedSuppliers.length > 0 ? (
+              sortedSuppliers.map((supplier) => (
                 <SupplierCard
                   key={supplier.id}
                   name={supplier.name}
