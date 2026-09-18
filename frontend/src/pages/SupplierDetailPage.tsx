@@ -27,14 +27,18 @@ function SupplierDetailPage() {
   return (
     <Container component="main" maxWidth="md" sx={{ py: { xs: 3, md: 6 } }}>
       <Stack spacing={3}>
-        <Button
-          component={Link}
-          to="/suppliers"
-          variant="outlined"
-          sx={{ alignSelf: 'flex-start' }}
-        >
-          Back
-        </Button>
+        <Stack direction="row" spacing={2}>
+          <Button component={Link} to="/suppliers" variant="outlined">
+            Back
+          </Button>
+          <Button
+            component={Link}
+            to={`/suppliers/${supplier.id}/edit`}
+            variant="contained"
+          >
+            Edit
+          </Button>
+        </Stack>
 
         <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 } }}>
           <Stack spacing={1}>
