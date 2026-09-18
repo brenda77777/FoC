@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import {
   Box,
+  Button,
   Container,
   FormControl,
   InputLabel,
@@ -11,6 +12,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
+import { Link } from 'react-router-dom'
 import SupplierCard from '../components/SupplierCard'
 
 // Temporary frontend-only data used while developing the page.
@@ -75,9 +77,26 @@ function SupplierListPage() {
     // xs applies on small screens, while md applies on medium screens and larger.
     <Container component="main" maxWidth="lg" sx={{ py: { xs: 3, md: 6 } }}>
       <Stack spacing={{ xs: 2, md: 3 }}>
-        <Typography component="h1" variant="h4" sx={{ fontWeight: 600 }}>
-          Suppliers
-        </Typography>
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={2}
+          sx={{
+            alignItems: { sm: 'center' },
+            justifyContent: 'space-between',
+          }}
+        >
+          <Typography component="h1" variant="h4" sx={{ fontWeight: 600 }}>
+            Suppliers
+          </Typography>
+          <Button
+            component={Link}
+            to="/suppliers/new"
+            variant="contained"
+            sx={{ alignSelf: { xs: 'flex-start', sm: 'auto' } }}
+          >
+            Add Supplier
+          </Button>
+        </Stack>
 
         <TextField
           fullWidth

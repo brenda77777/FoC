@@ -1,0 +1,132 @@
+import { useState, type FormEvent } from 'react'
+import {
+  Button,
+  Container,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
+import { Link } from 'react-router-dom'
+
+function CreateSupplierPage() {
+  const [formValues, setFormValues] = useState({
+    supplierName: '',
+    type: '',
+    location: '',
+    operatingHours: '',
+  })
+
+  const [errors, setErrors] = useState({
+    supplierName: false,
+    type: false,
+    location: false,
+  })
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    const newErrors = {
+      supplierName: formValues.supplierName.trim() === '',
+      type: formValues.type === '',
+      location: formValues.location.trim() === '',
+    }
+
+    setErrors(newErrors)
+
+    if (Object.values(newErrors).some((hasError) => hasError)) {
+      return
+    }
+
+    // TODO: Send the validated form to the team's existing Supplier Service.
+  }
+
+  return (
+    <Container component="main" maxWidth="sm" sx={{ py: { xs: 3, md: 6 } }}>
+      <Stack spacing={3}>
+        <Typography component="h1" variant="h4" sx={{ fontWeight: 600 }}>
+          Create Supplier
+        </Typography>
+
+        <form onSubmit={handleSubmit} noValidate>
+          <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 } }}>
+            <Stack spacing={3}>
+              <TextField
+                required
+                label="Supplier Name"
+                value={formValues.supplierName}
+                onChange={(event) =>
+                  setFormValues({
+                    ...formValues,
+                    supplierName: event.target.value,
+                  })
+                }
+                error={errors.supplierName}
+                helperText={
+                  errors.supplierName ? 'Supplier name is required' : ''
+                }
+              />
+
+              <FormControl required error={errors.type}>
+                <InputLabel id="create-supplier-type-label">Type</InputLabel>
+                <Select
+                  labelId="create-supplier-type-label"
+                  label="Type"
+                  value={formValues.type}
+                  onChange={(event) =>
+                    setFormValues({ ...formValues, type: event.target.value })
+                  }
+                >
+                  <MenuItem value="Food">Food</MenuItem>
+                  <MenuItem value="Printing">Printing</MenuItem>
+                </Select>
+                {errors.type && <FormHelperText>Type is required</FormHelperText>}
+              </FormControl>
+
+              <TextField
+                required
+                label="Location"
+                value={formValues.location}
+                onChange={(event) =>
+                  setFormValues({
+                    ...formValues,
+                    location: event.target.value,
+                  })
+                }
+                error={errors.location}
+                helperText={errors.location ? 'Location is required' : ''}
+              />
+
+              <TextField
+                label="Operating Hours"
+                value={formValues.operatingHours}
+                onChange={(event) =>
+                  setFormValues({
+                    ...formValues,
+                    operatingHours: event.target.value,
+                  })
+                }
+              />
+
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                <Button type="submit" variant="contained">
+                  Create Supplier
+                </Button>
+                <Button component={Link} to="/suppliers" variant="outlined">
+                  Cancel
+                </Button>
+              </Stack>
+            </Stack>
+          </Paper>
+        </form>
+      </Stack>
+    </Container>
+  )
+}
+
+export default CreateSupplierPage
