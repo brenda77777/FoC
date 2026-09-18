@@ -5,6 +5,7 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  Pagination,
   Select,
   Stack,
   TextField,
@@ -36,10 +37,13 @@ const sampleSuppliers = [
   },
 ]
 
+const itemsPerPage = 2
+
 function SupplierListPage() {
   const [searchText, setSearchText] = useState('')
   const [selectedType, setSelectedType] = useState('All')
   const [selectedSort, setSelectedSort] = useState('name-asc')
+  const [page, setPage] = useState(1)
 
   const normalizedSearch = searchText.toLowerCase()
   const filteredSuppliers = sampleSuppliers.filter((supplier) => {
@@ -62,6 +66,11 @@ function SupplierListPage() {
     return first.name.localeCompare(second.name)
   })
 
+  const pageCount = Math.ceil(sortedSuppliers.length / itemsPerPage)
+  const startIndex = (page - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const paginatedSuppliers = sortedSuppliers.slice(startIndex, endIndex)
+
   return (
     // xs applies on small screens, while md applies on medium screens and larger.
     <Container component="main" maxWidth="lg" sx={{ py: { xs: 3, md: 6 } }}>
@@ -74,7 +83,10 @@ function SupplierListPage() {
           fullWidth
           placeholder="Search suppliers"
           value={searchText}
-          onChange={(event) => setSearchText(event.target.value)}
+          onChange={(event) => {
+            setSearchText(event.target.value)
+            setPage(1)
+          }}
           slotProps={{ htmlInput: { 'aria-label': 'Search suppliers' } }}
           sx={{ maxWidth: 480 }}
         />
@@ -86,7 +98,10 @@ function SupplierListPage() {
               labelId="supplier-type-label"
               value={selectedType}
               label="Supplier type"
-              onChange={(event) => setSelectedType(event.target.value)}
+              onChange={(event) => {
+                setSelectedType(event.target.value)
+                setPage(1)
+              }}
             >
               <MenuItem value="All">All</MenuItem>
               <MenuItem value="Food">Food</MenuItem>
@@ -111,7 +126,7 @@ function SupplierListPage() {
         <Box aria-label="Supplier results" sx={{ minHeight: { xs: 320, md: 480 } }}>
           <Stack spacing={{ xs: 2, md: 3 }}>
             {sortedSuppliers.length > 0 ? (
-              sortedSuppliers.map((supplier) => (
+              paginatedSuppliers.map((supplier) => (
                 <SupplierCard
                   key={supplier.id}
                   name={supplier.name}
@@ -122,6 +137,15 @@ function SupplierListPage() {
               ))
             ) : (
               <Typography color="text.secondary">No suppliers found</Typography>
+            )}
+
+            {pageCount > 0 && (
+              <Pagination
+                count={pageCount}
+                page={page}
+                onChange={(_, newPage) => setPage(newPage)}
+                color="primary"
+              />
             )}
           </Stack>
         </Box>
