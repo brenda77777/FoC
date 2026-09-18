@@ -1,7 +1,9 @@
 import { Button, Card, CardActions, CardContent, Stack, Typography } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 // These props describe the supplier information that the card accepts.
 type SupplierCardProps = {
+  id: number
   name: string
   type: string
   location: string
@@ -10,6 +12,7 @@ type SupplierCardProps = {
 }
 
 function SupplierCard({
+  id,
   name,
   type,
   location,
@@ -34,7 +37,9 @@ function SupplierCard({
       </CardContent>
 
       <CardActions sx={{ px: 2, pb: 2 }}>
-        <Button variant="contained">View Details</Button>
+        <Button component={Link} to={`/suppliers/${id}`} variant="contained">
+          View Details
+        </Button>
       </CardActions>
     </Card>
   )

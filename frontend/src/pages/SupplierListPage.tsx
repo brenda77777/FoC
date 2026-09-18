@@ -14,7 +14,7 @@ import {
 import SupplierCard from '../components/SupplierCard'
 
 // Temporary frontend-only data used while developing the page.
-const sampleSuppliers = [
+export const sampleSuppliers = [
   {
     id: 1,
     name: 'Cool Spot',
@@ -129,6 +129,7 @@ function SupplierListPage() {
               paginatedSuppliers.map((supplier) => (
                 <SupplierCard
                   key={supplier.id}
+                  id={supplier.id}
                   name={supplier.name}
                   type={supplier.type}
                   location={supplier.location}
