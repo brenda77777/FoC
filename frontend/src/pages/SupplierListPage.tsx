@@ -41,7 +41,11 @@ export const sampleSuppliers = [
 
 const itemsPerPage = 2
 
-function SupplierListPage() {
+type SupplierListPageProps = {
+  isAdmin: boolean
+}
+
+function SupplierListPage({ isAdmin }: SupplierListPageProps) {
   const [searchText, setSearchText] = useState('')
   const [selectedType, setSelectedType] = useState('All')
   const [selectedSort, setSelectedSort] = useState('name-asc')
@@ -88,14 +92,16 @@ function SupplierListPage() {
           <Typography component="h1" variant="h4" sx={{ fontWeight: 600 }}>
             Suppliers
           </Typography>
-          <Button
-            component={Link}
-            to="/suppliers/new"
-            variant="contained"
-            sx={{ alignSelf: { xs: 'flex-start', sm: 'auto' } }}
-          >
-            Add Supplier
-          </Button>
+          {isAdmin && (
+            <Button
+              component={Link}
+              to="/suppliers/new"
+              variant="contained"
+              sx={{ alignSelf: { xs: 'flex-start', sm: 'auto' } }}
+            >
+              Add Supplier
+            </Button>
+          )}
         </Stack>
 
         <TextField

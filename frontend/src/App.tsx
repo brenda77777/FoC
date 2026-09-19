@@ -6,6 +6,9 @@ import EditSupplierPage from './pages/EditSupplierPage'
 import SupplierDetailPage from './pages/SupplierDetailPage'
 import SupplierListPage from './pages/SupplierListPage'
 
+// TODO: Replace this preview value with role information from the team's User Service/auth integration.
+const TEMPORARY_IS_ADMIN = false
+
 function App() {
   return (
     <BrowserRouter>
@@ -14,13 +17,19 @@ function App() {
         <AppNavigation />
         <Routes>
           <Route path="/" element={<Navigate to="/suppliers" replace />} />
-          <Route path="/suppliers" element={<SupplierListPage />} />
+          <Route
+            path="/suppliers"
+            element={<SupplierListPage isAdmin={TEMPORARY_IS_ADMIN} />}
+          />
           <Route path="/suppliers/new" element={<CreateSupplierPage />} />
           <Route
             path="/suppliers/:supplierId/edit"
             element={<EditSupplierPage />}
           />
-          <Route path="/suppliers/:supplierId" element={<SupplierDetailPage />} />
+          <Route
+            path="/suppliers/:supplierId"
+            element={<SupplierDetailPage isAdmin={TEMPORARY_IS_ADMIN} />}
+          />
         </Routes>
       </Box>
     </BrowserRouter>

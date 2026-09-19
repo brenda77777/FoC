@@ -15,7 +15,11 @@ import { Link, useParams } from 'react-router-dom'
 import SupplierInfo from '../components/SupplierInfo'
 import { sampleSuppliers } from './SupplierListPage'
 
-function SupplierDetailPage() {
+type SupplierDetailPageProps = {
+  isAdmin: boolean
+}
+
+function SupplierDetailPage({ isAdmin }: SupplierDetailPageProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
   // Route parameters are strings, so convert the ID to a number before comparing it.
@@ -51,20 +55,24 @@ function SupplierDetailPage() {
           <Button component={Link} to="/suppliers" variant="outlined">
             Back
           </Button>
-          <Button
-            component={Link}
-            to={`/suppliers/${supplier.id}/edit`}
-            variant="contained"
-          >
-            Edit
-          </Button>
-          <Button
-            color="error"
-            variant="outlined"
-            onClick={() => setIsDeleteDialogOpen(true)}
-          >
-            Delete
-          </Button>
+          {isAdmin && (
+            <>
+              <Button
+                component={Link}
+                to={`/suppliers/${supplier.id}/edit`}
+                variant="contained"
+              >
+                Edit
+              </Button>
+              <Button
+                color="error"
+                variant="outlined"
+                onClick={() => setIsDeleteDialogOpen(true)}
+              >
+                Delete
+              </Button>
+            </>
+          )}
         </Stack>
 
         <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 } }}>
@@ -81,23 +89,25 @@ function SupplierDetailPage() {
         </Paper>
       </Stack>
 
-      <Dialog
-        open={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
-      >
-        <DialogTitle>Delete {supplier.name}?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete this supplier?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
-          <Button color="error" variant="contained" onClick={handleDelete}>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {isAdmin && (
+        <Dialog
+          open={isDeleteDialogOpen}
+          onClose={() => setIsDeleteDialogOpen(false)}
+        >
+          <DialogTitle>Delete {supplier.name}?</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete this supplier?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setIsDeleteDialogOpen(false)}>Cancel</Button>
+            <Button color="error" variant="contained" onClick={handleDelete}>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </Container>
   )
 }
