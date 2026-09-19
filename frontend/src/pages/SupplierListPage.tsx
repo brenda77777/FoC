@@ -7,6 +7,7 @@ import {
   InputLabel,
   MenuItem,
   Pagination,
+  Paper,
   Select,
   Stack,
   TextField,
@@ -99,9 +100,14 @@ function SupplierListPage({ isAdmin }: SupplierListPageProps) {
             justifyContent: 'space-between',
           }}
         >
-          <Typography component="h1" variant="h4" sx={{ fontWeight: 600 }}>
-            Suppliers
-          </Typography>
+          <Box>
+            <Typography component="h1" variant="h4">
+              Suppliers
+            </Typography>
+            <Typography color="text.secondary" sx={{ mt: 0.5 }}>
+              Find useful food, printing, and campus services.
+            </Typography>
+          </Box>
           {isAdmin && (
             <Button
               component={Link}
@@ -114,58 +120,77 @@ function SupplierListPage({ isAdmin }: SupplierListPageProps) {
           )}
         </Stack>
 
-        <TextField
-          fullWidth
-          placeholder="Search suppliers"
-          value={searchText}
-          onChange={(event) => {
-            setSearchText(event.target.value)
-            setPage(1)
-          }}
-          slotProps={{ htmlInput: { 'aria-label': 'Search suppliers' } }}
-          sx={{ maxWidth: 480 }}
-        />
-
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <FormControl fullWidth sx={{ maxWidth: 240 }}>
-            <InputLabel id="supplier-type-label">Supplier type</InputLabel>
-            <Select
-              labelId="supplier-type-label"
-              value={selectedType}
-              label="Supplier type"
+        <Paper
+          variant="outlined"
+          sx={{ p: { xs: 2, md: 2.5 }, borderColor: 'divider' }}
+        >
+          <Stack spacing={2}>
+            <TextField
+              fullWidth
+              placeholder="Search suppliers"
+              value={searchText}
               onChange={(event) => {
-                setSelectedType(event.target.value)
+                setSearchText(event.target.value)
                 setPage(1)
               }}
-            >
-              <MenuItem value="All">All</MenuItem>
-              <MenuItem value="Food">Food</MenuItem>
-              <MenuItem value="Printing">Printing</MenuItem>
-            </Select>
-          </FormControl>
+              slotProps={{ htmlInput: { 'aria-label': 'Search suppliers' } }}
+              sx={{ maxWidth: 560 }}
+            />
 
-          <FormControl fullWidth sx={{ maxWidth: 240 }}>
-            <InputLabel id="supplier-sort-label">Sort by</InputLabel>
-            <Select
-              labelId="supplier-sort-label"
-              value={selectedSort}
-              label="Sort by"
-              onChange={(event) => setSelectedSort(event.target.value)}
-            >
-              <MenuItem value="name-asc">Name A-Z</MenuItem>
-              <MenuItem value="name-desc">Name Z-A</MenuItem>
-            </Select>
-          </FormControl>
-        </Stack>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+              <FormControl fullWidth sx={{ maxWidth: 260 }}>
+                <InputLabel id="supplier-type-label">Supplier type</InputLabel>
+                <Select
+                  labelId="supplier-type-label"
+                  value={selectedType}
+                  label="Supplier type"
+                  onChange={(event) => {
+                    setSelectedType(event.target.value)
+                    setPage(1)
+                  }}
+                >
+                  <MenuItem value="All">All</MenuItem>
+                  <MenuItem value="Food">Food</MenuItem>
+                  <MenuItem value="Printing">Printing</MenuItem>
+                </Select>
+              </FormControl>
+
+              <FormControl fullWidth sx={{ maxWidth: 260 }}>
+                <InputLabel id="supplier-sort-label">Sort by</InputLabel>
+                <Select
+                  labelId="supplier-sort-label"
+                  value={selectedSort}
+                  label="Sort by"
+                  onChange={(event) => setSelectedSort(event.target.value)}
+                >
+                  <MenuItem value="name-asc">Name A-Z</MenuItem>
+                  <MenuItem value="name-desc">Name Z-A</MenuItem>
+                </Select>
+              </FormControl>
+            </Stack>
+          </Stack>
+        </Paper>
 
         <Box aria-label="Supplier results" sx={{ minHeight: { xs: 320, md: 480 } }}>
-          <Stack spacing={{ xs: 2, md: 3 }}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', lg: 'repeat(2, minmax(0, 1fr))' },
+              gap: { xs: 2, md: 3 },
+            }}
+          >
             {listPreviewState === 'loading' ? (
-              <SupplierListStatus status="loading" />
+              <Box sx={{ gridColumn: '1 / -1' }}>
+                <SupplierListStatus status="loading" />
+              </Box>
             ) : listPreviewState === 'error' ? (
-              <SupplierListStatus status="error" />
+              <Box sx={{ gridColumn: '1 / -1' }}>
+                <SupplierListStatus status="error" />
+              </Box>
             ) : supplierRecords.length === 0 ? (
-              <SupplierListStatus status="empty" />
+              <Box sx={{ gridColumn: '1 / -1' }}>
+                <SupplierListStatus status="empty" />
+              </Box>
             ) : sortedSuppliers.length > 0 ? (
               paginatedSuppliers.map((supplier) => (
                 <SupplierCard
@@ -178,18 +203,21 @@ function SupplierListPage({ isAdmin }: SupplierListPageProps) {
                 />
               ))
             ) : (
-              <SupplierListStatus status="no-results" />
+              <Box sx={{ gridColumn: '1 / -1' }}>
+                <SupplierListStatus status="no-results" />
+              </Box>
             )}
+          </Box>
 
-            {listPreviewState === 'ready' && pageCount > 0 && (
-              <Pagination
-                count={pageCount}
-                page={page}
-                onChange={(_, newPage) => setPage(newPage)}
-                color="primary"
-              />
-            )}
-          </Stack>
+          {listPreviewState === 'ready' && pageCount > 0 && (
+            <Pagination
+              count={pageCount}
+              page={page}
+              onChange={(_, newPage) => setPage(newPage)}
+              color="primary"
+              sx={{ mt: 3 }}
+            />
+          )}
         </Box>
       </Stack>
     </Container>

@@ -1,0 +1,92 @@
+import { createTheme } from '@mui/material/styles'
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#173F5F',
+      dark: '#0F2F48',
+      light: '#DCEAF2',
+      contrastText: '#FFFFFF',
+    },
+    secondary: {
+      main: '#2A7F7A',
+      dark: '#1F625E',
+      light: '#DDF1EE',
+      contrastText: '#FFFFFF',
+    },
+    background: {
+      default: '#F5F7F8',
+      paper: '#FFFFFF',
+    },
+    text: {
+      primary: '#17232D',
+      secondary: '#5C6B76',
+    },
+    divider: '#DCE3E7',
+  },
+  shape: {
+    borderRadius: 12,
+  },
+  typography: {
+    fontFamily:
+      "Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    h4: {
+      fontWeight: 700,
+      letterSpacing: '-0.025em',
+    },
+    h5: {
+      fontWeight: 700,
+      letterSpacing: '-0.015em',
+    },
+    h6: {
+      fontWeight: 650,
+    },
+    button: {
+      fontWeight: 650,
+      letterSpacing: '0.01em',
+      textTransform: 'none',
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          minHeight: 40,
+          borderRadius: 10,
+          paddingInline: 18,
+          boxShadow: 'none',
+        },
+        contained: {
+          '&:hover': {
+            boxShadow: '0 4px 12px rgba(23, 63, 95, 0.18)',
+          },
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 10,
+          backgroundColor: '#FFFFFF',
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        rounded: {
+          borderRadius: 14,
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+          fontWeight: 650,
+        },
+      },
+    },
+  },
+})
+
+export default theme

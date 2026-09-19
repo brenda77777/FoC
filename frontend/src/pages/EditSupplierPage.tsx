@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import {
+  Box,
   Button,
   Container,
   FormControl,
@@ -75,12 +76,24 @@ function EditSupplierPage() {
   return (
     <Container component="main" maxWidth="sm" sx={{ py: { xs: 3, md: 6 } }}>
       <Stack spacing={3}>
-        <Typography component="h1" variant="h4" sx={{ fontWeight: 600 }}>
-          Edit Supplier
-        </Typography>
+        <Box>
+          <Typography component="h1" variant="h4">
+            Edit Supplier
+          </Typography>
+          <Typography color="text.secondary" sx={{ mt: 0.5 }}>
+            Keep this supplier&apos;s campus information up to date.
+          </Typography>
+        </Box>
 
         <form onSubmit={handleSubmit} noValidate>
-          <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 } }}>
+          <Paper
+            variant="outlined"
+            sx={{
+              p: { xs: 2.5, md: 3.5 },
+              borderColor: 'divider',
+              boxShadow: '0 8px 24px rgba(23, 35, 45, 0.05)',
+            }}
+          >
             <Stack spacing={3}>
               <TextField
                 required

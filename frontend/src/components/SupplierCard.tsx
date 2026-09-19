@@ -5,6 +5,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Chip,
   Stack,
   SvgIcon,
   Typography,
@@ -37,8 +38,16 @@ function SupplierCard({
       sx={{
         display: { xs: 'block', sm: 'flex' },
         width: '100%',
-        maxWidth: 720,
+        maxWidth: 'none',
         overflow: 'hidden',
+        borderColor: 'divider',
+        borderRadius: 3,
+        boxShadow: '0 8px 24px rgba(23, 35, 45, 0.06)',
+        transition: 'transform 160ms ease, box-shadow 160ms ease',
+        '&:hover': {
+          transform: 'translateY(-2px)',
+          boxShadow: '0 12px 30px rgba(23, 35, 45, 0.1)',
+        },
       }}
     >
       {imageUrl ? (
@@ -59,8 +68,9 @@ function SupplierCard({
             minHeight: { sm: 180 },
             flexShrink: 0,
             placeItems: 'center',
-            color: 'text.secondary',
-            bgcolor: 'action.hover',
+            color: 'primary.main',
+            background:
+              'linear-gradient(145deg, rgba(23, 63, 95, 0.08), rgba(42, 127, 122, 0.14))',
           }}
         >
           <SvgIcon sx={{ fontSize: 56 }} aria-hidden="true">
@@ -70,12 +80,18 @@ function SupplierCard({
       )}
 
       <Box sx={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-        <CardContent sx={{ flex: 1 }}>
+        <CardContent sx={{ flex: 1, p: { xs: 2, md: 2.5 } }}>
           <Stack spacing={1.5}>
             <Typography component="h2" variant="h5" sx={{ fontWeight: 600 }}>
               {name}
             </Typography>
-            <Typography color="text.secondary">Type: {type}</Typography>
+            <Chip
+              label={type}
+              size="small"
+              color={type === 'Food' ? 'secondary' : 'primary'}
+              variant="outlined"
+              sx={{ alignSelf: 'flex-start' }}
+            />
             <SupplierInfo
               location={location}
               operatingHours={operatingHours}
@@ -83,8 +99,13 @@ function SupplierCard({
           </Stack>
         </CardContent>
 
-        <CardActions sx={{ px: 2, pb: 2 }}>
-          <Button component={Link} to={`/suppliers/${id}`} variant="contained">
+        <CardActions sx={{ px: { xs: 2, md: 2.5 }, pb: { xs: 2, md: 2.5 } }}>
+          <Button
+            component={Link}
+            to={`/suppliers/${id}`}
+            variant="contained"
+            sx={{ width: { xs: '100%', sm: 'auto' } }}
+          >
             View Details
           </Button>
         </CardActions>

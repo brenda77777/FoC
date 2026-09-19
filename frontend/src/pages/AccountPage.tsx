@@ -64,9 +64,14 @@ function AccountPage() {
             justifyContent: 'space-between',
           }}
         >
-          <Typography component="h1" variant="h4" sx={{ fontWeight: 600 }}>
-            Account
-          </Typography>
+          <Box>
+            <Typography component="h1" variant="h4">
+              Account
+            </Typography>
+            <Typography color="text.secondary" sx={{ mt: 0.5 }}>
+              Manage your profile and view your available roles.
+            </Typography>
+          </Box>
 
           {!isEditing && (
             <Button
@@ -82,7 +87,14 @@ function AccountPage() {
           )}
         </Stack>
 
-        <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 } }}>
+        <Paper
+          variant="outlined"
+          sx={{
+            p: { xs: 2, md: 3 },
+            borderColor: 'divider',
+            boxShadow: '0 8px 24px rgba(23, 35, 45, 0.05)',
+          }}
+        >
           {isEditing ? (
             <form onSubmit={handleSave}>
               <Stack spacing={2}>

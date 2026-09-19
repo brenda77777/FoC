@@ -1,4 +1,4 @@
-import { Box, CssBaseline } from '@mui/material'
+import { Box, CssBaseline, ThemeProvider } from '@mui/material'
 import {
   BrowserRouter,
   Navigate,
@@ -16,6 +16,7 @@ import MyRequestsPage from './pages/MyRequestsPage.tsx'
 import RegisterPage from './pages/RegisterPage.tsx'
 import SupplierDetailPage from './pages/SupplierDetailPage.tsx'
 import SupplierListPage from './pages/SupplierListPage'
+import theme from './theme'
 
 // TODO: Replace this preview value with role information from the team's User Service/auth integration.
 const TEMPORARY_IS_ADMIN = false
@@ -29,6 +30,7 @@ function AppContent() {
     <Box
       sx={{
         minHeight: '100svh',
+        bgcolor: 'background.default',
         pb: isPublicPage ? 0 : { xs: 8, md: 0 },
       }}
     >
@@ -60,10 +62,12 @@ function AppContent() {
 
 function App() {
   return (
-    <BrowserRouter>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppContent />
-    </BrowserRouter>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
 

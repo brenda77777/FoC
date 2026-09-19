@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import {
   Alert,
+  Box,
   Button,
   Container,
   Link,
@@ -33,11 +34,30 @@ function LoginPage() {
   return (
     <Container component="main" maxWidth="sm" sx={{ py: { xs: 3, md: 6 } }}>
       <Stack spacing={3}>
-        <Typography component="h1" variant="h4" sx={{ fontWeight: 600 }}>
-          Log In
-        </Typography>
+        <Box>
+          <Typography
+            color="secondary.main"
+            sx={{ fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase' }}
+            variant="overline"
+          >
+            CampusGo
+          </Typography>
+          <Typography component="h1" variant="h4">
+            Log In
+          </Typography>
+          <Typography color="text.secondary" sx={{ mt: 0.75 }}>
+            Continue to your campus errands workspace.
+          </Typography>
+        </Box>
 
-        <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 } }}>
+        <Paper
+          variant="outlined"
+          sx={{
+            p: { xs: 2.5, md: 3.5 },
+            borderColor: 'divider',
+            boxShadow: '0 12px 34px rgba(23, 35, 45, 0.07)',
+          }}
+        >
           <form onSubmit={handleSubmit} noValidate>
             <Stack spacing={3}>
               {errorMessage && (

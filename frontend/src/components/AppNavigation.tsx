@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import {
   AppBar,
-  Box,
   BottomNavigation,
   BottomNavigationAction,
   Button,
@@ -14,6 +13,7 @@ import {
   Toolbar,
   ToggleButton,
   ToggleButtonGroup,
+  Typography,
   useTheme,
 } from '@mui/material'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -63,9 +63,11 @@ function ModeToggle({
   onChange: (newMode: UserMode) => void
 }) {
   const theme = useTheme()
+  const activePalette =
+    mode === 'requester' ? theme.palette.primary : theme.palette.secondary
   const activeStyle = {
-    color: theme.palette.primary.contrastText,
-    backgroundColor: theme.palette.primary.main,
+    color: activePalette.contrastText,
+    backgroundColor: activePalette.main,
   }
 
   return (
@@ -131,8 +133,13 @@ function AppNavigation() {
         component="nav"
         position="sticky"
         color="default"
-        elevation={1}
-        sx={{ display: { xs: 'none', md: 'block' } }}
+        elevation={0}
+        sx={{
+          display: { xs: 'none', md: 'block' },
+          borderBottom: 1,
+          borderColor: 'divider',
+          bgcolor: 'rgba(255, 255, 255, 0.96)',
+        }}
       >
         <Toolbar
           sx={{
@@ -141,9 +148,24 @@ function AppNavigation() {
             gap: 2,
           }}
         >
-          <Box sx={{ justifySelf: 'start' }}>
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ alignItems: 'center', justifySelf: 'start' }}
+          >
+            <Typography
+              sx={{
+                display: { md: 'none', lg: 'block' },
+                color: 'primary.main',
+                fontSize: '1.1rem',
+                fontWeight: 800,
+                letterSpacing: '-0.02em',
+              }}
+            >
+              CampusGo
+            </Typography>
             <ModeToggle mode={mode} onChange={handleModeChange} />
-          </Box>
+          </Stack>
 
           <Stack direction="row" spacing={1}>
             {navigationItems.map((item) => {
@@ -184,23 +206,38 @@ function AppNavigation() {
           position: 'sticky',
           top: 0,
           zIndex: 1100,
-          p: 1,
+          px: 1.5,
+          py: 1,
+          borderBottom: 1,
+          borderColor: 'divider',
         }}
       >
-        <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-          <Box sx={{ flex: 1 }}>
-            <ModeToggle mode={mode} onChange={handleModeChange} />
-          </Box>
-          <IconButton
-            aria-label="Open account actions"
-            aria-haspopup="menu"
-            aria-expanded={mobileMenuAnchor ? 'true' : undefined}
-            onClick={(event) => setMobileMenuAnchor(event.currentTarget)}
+        <Stack spacing={1}>
+          <Stack
+            direction="row"
+            sx={{ alignItems: 'center', justifyContent: 'space-between' }}
           >
-            <SvgIcon aria-hidden="true">
-              <path d="M12 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
-            </SvgIcon>
-          </IconButton>
+            <Typography
+              sx={{
+                color: 'primary.main',
+                fontSize: '1.05rem',
+                fontWeight: 800,
+              }}
+            >
+              CampusGo
+            </Typography>
+            <IconButton
+              aria-label="Open account actions"
+              aria-haspopup="menu"
+              aria-expanded={mobileMenuAnchor ? 'true' : undefined}
+              onClick={(event) => setMobileMenuAnchor(event.currentTarget)}
+            >
+              <SvgIcon aria-hidden="true">
+                <path d="M12 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
+              </SvgIcon>
+            </IconButton>
+          </Stack>
+          <ModeToggle mode={mode} onChange={handleModeChange} />
         </Stack>
       </Paper>
 
@@ -223,6 +260,8 @@ function AppNavigation() {
           bottom: 0,
           left: 0,
           zIndex: 1200,
+          borderTop: 1,
+          borderColor: 'divider',
         }}
       >
         <BottomNavigation

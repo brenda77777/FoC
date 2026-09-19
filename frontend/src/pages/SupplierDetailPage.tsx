@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import {
   Button,
+  Chip,
   Container,
   Dialog,
   DialogActions,
@@ -78,12 +79,25 @@ function SupplierDetailPage({ isAdmin }: SupplierDetailPageProps) {
           )}
         </Stack>
 
-        <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 } }}>
-          <Stack spacing={1}>
-            <Typography component="h1" variant="h4" sx={{ fontWeight: 600 }}>
+        <Paper
+          variant="outlined"
+          sx={{
+            p: { xs: 2.5, md: 3.5 },
+            borderColor: 'divider',
+            boxShadow: '0 8px 24px rgba(23, 35, 45, 0.06)',
+          }}
+        >
+          <Stack spacing={1.5}>
+            <Typography component="h1" variant="h4">
               {supplier.name}
             </Typography>
-            <Typography>Type: {supplier.type}</Typography>
+            <Chip
+              label={supplier.type}
+              size="small"
+              color={supplier.type === 'Food' ? 'secondary' : 'primary'}
+              variant="outlined"
+              sx={{ alignSelf: 'flex-start' }}
+            />
             <SupplierInfo
               location={supplier.location}
               operatingHours={supplier.operatingHours}
