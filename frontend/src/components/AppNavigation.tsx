@@ -1,17 +1,22 @@
 import { useState } from 'react'
 import {
   AppBar,
+  Box,
   BottomNavigation,
   BottomNavigationAction,
   Button,
+  IconButton,
+  Menu,
+  MenuItem,
   Paper,
+  Stack,
   SvgIcon,
   Toolbar,
   ToggleButton,
   ToggleButtonGroup,
   useTheme,
 } from '@mui/material'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 type UserMode = 'requester' | 'courier'
 
@@ -93,6 +98,7 @@ function ModeToggle({
 
 function AppNavigation() {
   const location = useLocation()
+  const navigate = useNavigate()
   const activeNavigationItem =
     navigationItems.find((item) => {
       if (item.value === 'suppliers') {
@@ -104,9 +110,19 @@ function AppNavigation() {
 
   // TODO: Load and persist the active mode through the team's User Service.
   const [mode, setMode] = useState<UserMode>('requester')
+  const [mobileMenuAnchor, setMobileMenuAnchor] =
+    useState<HTMLElement | null>(null)
 
   function handleModeChange(newMode: UserMode) {
     setMode(newMode)
+  }
+
+  function handleLogout() {
+    setMobileMenuAnchor(null)
+
+    // TODO: Replace this navigation-only logout with real authenticated session
+    // handling through the team's existing User Service.
+    navigate('/login')
   }
 
   return (
@@ -118,25 +134,43 @@ function AppNavigation() {
         elevation={1}
         sx={{ display: { xs: 'none', md: 'block' } }}
       >
-        <Toolbar sx={{ justifyContent: 'center', gap: 2 }}>
-          <ModeToggle mode={mode} onChange={handleModeChange} />
+        <Toolbar
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: '1fr auto 1fr',
+            gap: 2,
+          }}
+        >
+          <Box sx={{ justifySelf: 'start' }}>
+            <ModeToggle mode={mode} onChange={handleModeChange} />
+          </Box>
 
-          {navigationItems.map((item) => {
-            const isActive = item.value === activeNavigationItem
+          <Stack direction="row" spacing={1}>
+            {navigationItems.map((item) => {
+              const isActive = item.value === activeNavigationItem
 
-            return (
-              <Button
-                key={item.value}
-                component={Link}
-                to={item.to}
-                startIcon={<NavigationIcon path={item.path} />}
-                variant={isActive ? 'contained' : 'text'}
-                color={isActive ? 'primary' : 'inherit'}
-              >
-                {item.label}
-              </Button>
-            )
-          })}
+              return (
+                <Button
+                  key={item.value}
+                  component={Link}
+                  to={item.to}
+                  startIcon={<NavigationIcon path={item.path} />}
+                  variant={isActive ? 'contained' : 'text'}
+                  color={isActive ? 'primary' : 'inherit'}
+                >
+                  {item.label}
+                </Button>
+              )
+            })}
+          </Stack>
+
+          <Button
+            variant="outlined"
+            onClick={handleLogout}
+            sx={{ justifySelf: 'end' }}
+          >
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
 
@@ -144,7 +178,7 @@ function AppNavigation() {
         component="section"
         square
         elevation={1}
-        aria-label="Choose user mode"
+        aria-label="Application controls"
         sx={{
           display: { xs: 'block', md: 'none' },
           position: 'sticky',
@@ -153,8 +187,30 @@ function AppNavigation() {
           p: 1,
         }}
       >
-        <ModeToggle mode={mode} onChange={handleModeChange} />
+        <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+          <Box sx={{ flex: 1 }}>
+            <ModeToggle mode={mode} onChange={handleModeChange} />
+          </Box>
+          <IconButton
+            aria-label="Open account actions"
+            aria-haspopup="menu"
+            aria-expanded={mobileMenuAnchor ? 'true' : undefined}
+            onClick={(event) => setMobileMenuAnchor(event.currentTarget)}
+          >
+            <SvgIcon aria-hidden="true">
+              <path d="M12 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
+            </SvgIcon>
+          </IconButton>
+        </Stack>
       </Paper>
+
+      <Menu
+        anchorEl={mobileMenuAnchor}
+        open={Boolean(mobileMenuAnchor)}
+        onClose={() => setMobileMenuAnchor(null)}
+      >
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      </Menu>
 
       <Paper
         component="nav"
