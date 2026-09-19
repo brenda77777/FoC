@@ -19,21 +19,25 @@ const navigationItems = [
   {
     label: 'Home',
     value: 'home',
+    to: '/home',
     path: 'M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5Z',
   },
   {
     label: 'Suppliers',
     value: 'suppliers',
+    to: '/suppliers',
     path: 'M4 4h16v2H4V4Zm-1 4h18l-1 5H4L3 8Zm2 7h14v6H5v-6Zm3 2v2h3v-2H8Z',
   },
   {
     label: 'My Requests',
     value: 'requests',
+    to: '/requests',
     path: 'M19 3h-4.18A3 3 0 0 0 9.18 3H5a2 2 0 0 0-2 2v16h18V5a2 2 0 0 0-2-2Zm-7-1a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm3 15H7v-2h8v2Zm2-4H7v-2h10v2Zm0-4H7V7h10v2Z',
   },
   {
     label: 'Account',
     value: 'account',
+    to: '/account',
     path: 'M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-5.52 0-10 2.24-10 5v3h20v-3c0-2.76-4.48-5-10-5Z',
   },
 ]
@@ -89,7 +93,14 @@ function ModeToggle({
 
 function AppNavigation() {
   const location = useLocation()
-  const suppliersIsActive = location.pathname.startsWith('/suppliers')
+  const activeNavigationItem =
+    navigationItems.find((item) => {
+      if (item.value === 'suppliers') {
+        return location.pathname.startsWith('/suppliers')
+      }
+
+      return location.pathname === item.to
+    })?.value ?? false
 
   // TODO: Load and persist the active mode through the team's User Service.
   const [mode, setMode] = useState<UserMode>('requester')
@@ -111,18 +122,16 @@ function AppNavigation() {
           <ModeToggle mode={mode} onChange={handleModeChange} />
 
           {navigationItems.map((item) => {
-            const isSuppliers = item.value === 'suppliers'
+            const isActive = item.value === activeNavigationItem
 
             return (
               <Button
                 key={item.value}
-                component={isSuppliers ? Link : 'button'}
-                to={isSuppliers ? '/suppliers' : undefined}
+                component={Link}
+                to={item.to}
                 startIcon={<NavigationIcon path={item.path} />}
-                variant={
-                  isSuppliers && suppliersIsActive ? 'contained' : 'text'
-                }
-                color={isSuppliers && suppliersIsActive ? 'primary' : 'inherit'}
+                variant={isActive ? 'contained' : 'text'}
+                color={isActive ? 'primary' : 'inherit'}
               >
                 {item.label}
               </Button>
@@ -162,22 +171,18 @@ function AppNavigation() {
       >
         <BottomNavigation
           showLabels
-          value={suppliersIsActive ? 'suppliers' : false}
+          value={activeNavigationItem}
         >
-          {navigationItems.map((item) => {
-            const isSuppliers = item.value === 'suppliers'
-
-            return (
-              <BottomNavigationAction
-                key={item.value}
-                component={isSuppliers ? Link : 'button'}
-                to={isSuppliers ? '/suppliers' : undefined}
-                label={item.label}
-                value={item.value}
-                icon={<NavigationIcon path={item.path} />}
-              />
-            )
-          })}
+          {navigationItems.map((item) => (
+            <BottomNavigationAction
+              key={item.value}
+              component={Link}
+              to={item.to}
+              label={item.label}
+              value={item.value}
+              icon={<NavigationIcon path={item.path} />}
+            />
+          ))}
         </BottomNavigation>
       </Paper>
     </>
