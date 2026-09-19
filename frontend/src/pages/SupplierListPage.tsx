@@ -14,6 +14,7 @@ import {
 } from '@mui/material'
 import { Link } from 'react-router-dom'
 import SupplierCard from '../components/SupplierCard'
+import SupplierListStatus from '../components/SupplierListStatus'
 
 // Temporary frontend-only data used while developing the page.
 export const sampleSuppliers = [
@@ -45,14 +46,23 @@ type SupplierListPageProps = {
   isAdmin: boolean
 }
 
+type SupplierListPreviewState = 'ready' | 'loading' | 'empty' | 'error'
+
 function SupplierListPage({ isAdmin }: SupplierListPageProps) {
+  // Change 'ready' to 'loading', 'empty', or 'error' to preview each list state.
+  // TODO: Replace this preview state with results from the Supplier Service.
+  const [listPreviewState] = useState<SupplierListPreviewState>('ready')
+
   const [searchText, setSearchText] = useState('')
   const [selectedType, setSelectedType] = useState('All')
   const [selectedSort, setSelectedSort] = useState('name-asc')
   const [page, setPage] = useState(1)
 
+  const supplierRecords =
+    listPreviewState === 'empty' ? [] : sampleSuppliers
+
   const normalizedSearch = searchText.toLowerCase()
-  const filteredSuppliers = sampleSuppliers.filter((supplier) => {
+  const filteredSuppliers = supplierRecords.filter((supplier) => {
     const matchesSearch =
       supplier.name.toLowerCase().includes(normalizedSearch) ||
       supplier.type.toLowerCase().includes(normalizedSearch) ||
@@ -150,7 +160,13 @@ function SupplierListPage({ isAdmin }: SupplierListPageProps) {
 
         <Box aria-label="Supplier results" sx={{ minHeight: { xs: 320, md: 480 } }}>
           <Stack spacing={{ xs: 2, md: 3 }}>
-            {sortedSuppliers.length > 0 ? (
+            {listPreviewState === 'loading' ? (
+              <SupplierListStatus status="loading" />
+            ) : listPreviewState === 'error' ? (
+              <SupplierListStatus status="error" />
+            ) : supplierRecords.length === 0 ? (
+              <SupplierListStatus status="empty" />
+            ) : sortedSuppliers.length > 0 ? (
               paginatedSuppliers.map((supplier) => (
                 <SupplierCard
                   key={supplier.id}
@@ -162,10 +178,10 @@ function SupplierListPage({ isAdmin }: SupplierListPageProps) {
                 />
               ))
             ) : (
-              <Typography color="text.secondary">No suppliers found</Typography>
+              <SupplierListStatus status="no-results" />
             )}
 
-            {pageCount > 0 && (
+            {listPreviewState === 'ready' && pageCount > 0 && (
               <Pagination
                 count={pageCount}
                 page={page}

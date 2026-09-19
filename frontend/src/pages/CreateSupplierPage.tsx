@@ -13,8 +13,11 @@ import {
   Typography,
 } from '@mui/material'
 import { Link } from 'react-router-dom'
+import SuccessSnackbar from '../components/SuccessSnackbar'
 
 function CreateSupplierPage() {
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false)
+
   const [formValues, setFormValues] = useState({
     supplierName: '',
     type: '',
@@ -44,6 +47,7 @@ function CreateSupplierPage() {
     }
 
     // TODO: Send the validated form to the team's existing Supplier Service.
+    setIsSuccessOpen(true)
   }
 
   return (
@@ -125,6 +129,12 @@ function CreateSupplierPage() {
           </Paper>
         </form>
       </Stack>
+
+      <SuccessSnackbar
+        open={isSuccessOpen}
+        message="Supplier created successfully (UI preview)."
+        onClose={() => setIsSuccessOpen(false)}
+      />
     </Container>
   )
 }

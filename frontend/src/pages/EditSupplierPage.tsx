@@ -13,9 +13,12 @@ import {
   Typography,
 } from '@mui/material'
 import { Link, useParams } from 'react-router-dom'
+import SuccessSnackbar from '../components/SuccessSnackbar'
 import { sampleSuppliers } from './SupplierListPage'
 
 function EditSupplierPage() {
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false)
+
   const { supplierId } = useParams()
   const supplier = sampleSuppliers.find(
     (item) => item.id === Number(supplierId),
@@ -51,6 +54,7 @@ function EditSupplierPage() {
     }
 
     // TODO: Send the validated updates to the team's existing Supplier Service API.
+    setIsSuccessOpen(true)
   }
 
   if (!supplier) {
@@ -151,6 +155,12 @@ function EditSupplierPage() {
           </Paper>
         </form>
       </Stack>
+
+      <SuccessSnackbar
+        open={isSuccessOpen}
+        message="Supplier changes saved successfully (UI preview)."
+        onClose={() => setIsSuccessOpen(false)}
+      />
     </Container>
   )
 }

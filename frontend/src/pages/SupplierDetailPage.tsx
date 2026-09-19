@@ -12,6 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 import { Link, useParams } from 'react-router-dom'
+import SuccessSnackbar from '../components/SuccessSnackbar'
 import SupplierInfo from '../components/SupplierInfo'
 import { sampleSuppliers } from './SupplierListPage'
 
@@ -21,6 +22,7 @@ type SupplierDetailPageProps = {
 
 function SupplierDetailPage({ isAdmin }: SupplierDetailPageProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false)
 
   // Route parameters are strings, so convert the ID to a number before comparing it.
   const { supplierId } = useParams()
@@ -31,6 +33,7 @@ function SupplierDetailPage({ isAdmin }: SupplierDetailPageProps) {
   function handleDelete() {
     // TODO: Delete this supplier through the team's existing Supplier Service.
     setIsDeleteDialogOpen(false)
+    setIsSuccessOpen(true)
   }
 
   if (!supplier) {
@@ -108,6 +111,12 @@ function SupplierDetailPage({ isAdmin }: SupplierDetailPageProps) {
           </DialogActions>
         </Dialog>
       )}
+
+      <SuccessSnackbar
+        open={isSuccessOpen}
+        message="Supplier deleted successfully (UI preview)."
+        onClose={() => setIsSuccessOpen(false)}
+      />
     </Container>
   )
 }

@@ -1,9 +1,9 @@
 import { Box, CssBaseline } from '@mui/material'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import AppNavigation from './components/AppNavigation'
-import CreateSupplierPage from './pages/CreateSupplierPage'
-import EditSupplierPage from './pages/EditSupplierPage'
-import SupplierDetailPage from './pages/SupplierDetailPage'
+import CreateSupplierPage from './pages/CreateSupplierPage.tsx'
+import EditSupplierPage from './pages/EditSupplierPage.tsx'
+import SupplierDetailPage from './pages/SupplierDetailPage.tsx'
 import SupplierListPage from './pages/SupplierListPage'
 
 // TODO: Replace this preview value with role information from the team's User Service/auth integration.
