@@ -12,6 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 import { Link, useParams } from 'react-router-dom'
+import SupplierInfo from '../components/SupplierInfo'
 import { sampleSuppliers } from './SupplierListPage'
 
 function SupplierDetailPage() {
@@ -72,10 +73,10 @@ function SupplierDetailPage() {
               {supplier.name}
             </Typography>
             <Typography>Type: {supplier.type}</Typography>
-            <Typography>Location: {supplier.location}</Typography>
-            {supplier.operatingHours && (
-              <Typography>Hours: {supplier.operatingHours}</Typography>
-            )}
+            <SupplierInfo
+              location={supplier.location}
+              operatingHours={supplier.operatingHours}
+            />
           </Stack>
         </Paper>
       </Stack>
