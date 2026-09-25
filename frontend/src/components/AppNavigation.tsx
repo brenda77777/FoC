@@ -185,20 +185,20 @@ function AppNavigation({ mode, onModeChange }: AppNavigationProps) {
       >
         <Toolbar
           sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 1.5,
+            display: 'grid',
+            gridTemplateColumns: { md: '1fr auto 1fr', lg: '1fr auto 1fr' },
+            alignItems: 'center',
+            columnGap: 1.5,
+            rowGap: 1,
             height: 'auto',
             minHeight: 64,
             py: 1,
-            justifyContent: 'space-between',
-            overflow: 'visible',
           }}
         >
           <Stack
             direction="row"
             spacing={2}
-            sx={{ alignItems: 'center' }}
+            sx={{ alignItems: 'center', justifySelf: 'start' }}
           >
             <Stack
               direction="row"
@@ -240,7 +240,7 @@ function AppNavigation({ mode, onModeChange }: AppNavigationProps) {
           <Stack
             direction="row"
             spacing={1}
-            sx={{ flex: '1 1 280px', flexWrap: 'wrap', justifyContent: 'flex-end', minWidth: 0 }}
+            sx={{ justifySelf: 'center', flexWrap: 'wrap', justifyContent: 'center' }}
           >
             {visibleNavigationItems.map((item) => {
               const isActive = item.value === activeNavigationItem
@@ -258,22 +258,22 @@ function AppNavigation({ mode, onModeChange }: AppNavigationProps) {
                 </Button>
               )
             })}
-            <Button
-              variant="outlined"
-              onClick={handleLogout}
-              sx={{
-                flex: '0 0 auto',
-                color: '#FFFFFF',
-                borderColor: 'rgba(255, 255, 255, 0.55)',
-                '&:hover': {
-                  borderColor: '#FFFFFF',
-                  bgcolor: 'rgba(255, 255, 255, 0.1)',
-                },
-              }}
-            >
-              Logout
-            </Button>
           </Stack>
+          <Button
+            variant="outlined"
+            onClick={handleLogout}
+            sx={{
+              justifySelf: 'end',
+              color: '#FFFFFF',
+              borderColor: 'rgba(255, 255, 255, 0.55)',
+              '&:hover': {
+                borderColor: '#FFFFFF',
+                bgcolor: 'rgba(255, 255, 255, 0.1)',
+              },
+            }}
+          >
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
 
