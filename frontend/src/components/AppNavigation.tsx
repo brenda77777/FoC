@@ -8,6 +8,7 @@
 import { useState } from 'react'
 import {
   AppBar,
+  Box,
   BottomNavigation,
   BottomNavigationAction,
   Button,
@@ -21,11 +22,16 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Typography,
-  useTheme,
 } from '@mui/material'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { CampusBuildingIcon } from './CampusArt'
 
-type UserMode = 'requester' | 'courier'
+export type UserMode = 'requester' | 'courier'
+
+type AppNavigationProps = {
+  mode: UserMode
+  onModeChange: (newMode: UserMode) => void
+}
 
 const navigationItems = [
   {
@@ -45,6 +51,12 @@ const navigationItems = [
     value: 'requests',
     to: '/requests',
     path: 'M19 3h-4.18A3 3 0 0 0 9.18 3H5a2 2 0 0 0-2 2v16h18V5a2 2 0 0 0-2-2Zm-7-1a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm3 15H7v-2h8v2Zm2-4H7v-2h10v2Zm0-4H7V7h10v2Z',
+  },
+  {
+    label: 'My Tasks',
+    value: 'tasks',
+    to: '/my-tasks',
+    path: 'M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z',
   },
   {
     label: 'Account',
@@ -69,12 +81,9 @@ function ModeToggle({
   mode: UserMode
   onChange: (newMode: UserMode) => void
 }) {
-  const theme = useTheme()
-  const activePalette =
-    mode === 'requester' ? theme.palette.primary : theme.palette.secondary
   const activeStyle = {
-    color: activePalette.contrastText,
-    backgroundColor: activePalette.main,
+    color: mode === 'courier' ? '#145E59' : '#12324C',
+    backgroundColor: '#FFFFFF',
   }
 
   return (
@@ -83,7 +92,16 @@ function ModeToggle({
       size="small"
       value={mode}
       aria-label="User mode"
-      sx={{ width: { xs: '100%', md: 'auto' } }}
+      sx={{
+        width: { xs: '100%', md: 'auto' },
+        bgcolor: 'rgba(255, 255, 255, 0.14)',
+        border: '1px solid rgba(255, 255, 255, 0.28)',
+        '& .MuiToggleButton-root': {
+          color: 'rgba(255, 255, 255, 0.86)',
+          border: 0,
+          px: 1.5,
+        },
+      }}
     >
       <ToggleButton
         value="requester"
@@ -105,11 +123,23 @@ function ModeToggle({
   )
 }
 
-function AppNavigation() {
+function AppNavigation({ mode, onModeChange }: AppNavigationProps) {
   const location = useLocation()
   const navigate = useNavigate()
+  const requestLabel = mode === 'courier' ? 'Fulfil Requests' : 'My Requests'
+  const visibleNavigationItems = navigationItems.filter((item) => {
+    if (item.value === 'suppliers') {
+      return mode === 'requester'
+    }
+
+    if (item.value === 'tasks') {
+      return mode === 'courier'
+    }
+
+    return true
+  })
   const activeNavigationItem =
-    navigationItems.find((item) => {
+    visibleNavigationItems.find((item) => {
       if (item.value === 'suppliers') {
         return location.pathname.startsWith('/suppliers')
       }
@@ -117,14 +147,21 @@ function AppNavigation() {
       return location.pathname === item.to
     })?.value ?? false
 
-  // TODO: Load and persist the active mode through the team's User Service.
-  const [mode, setMode] = useState<UserMode>('requester')
   const [mobileMenuAnchor, setMobileMenuAnchor] =
     useState<HTMLElement | null>(null)
-
-  function handleModeChange(newMode: UserMode) {
-    setMode(newMode)
-  }
+  const isCourier = mode === 'courier'
+  const barColor = isCourier ? '#145E59' : '#12324C'
+  const navButtonSx = (isActive: boolean) => ({
+    color: isActive ? barColor : 'rgba(255, 255, 255, 0.82)',
+    bgcolor: isActive ? '#FFFFFF' : 'transparent',
+    '&:hover': {
+      bgcolor: isActive ? '#FFFFFF' : 'rgba(255, 255, 255, 0.12)',
+    },
+    '&.Mui-focusVisible': {
+      outline: '2px solid #FFFFFF',
+      outlineOffset: 2,
+    },
+  })
 
   function handleLogout() {
     setMobileMenuAnchor(null)
@@ -139,43 +176,69 @@ function AppNavigation() {
       <AppBar
         component="nav"
         position="sticky"
-        color="default"
         elevation={0}
         sx={{
           display: { xs: 'none', md: 'block' },
-          borderBottom: 1,
-          borderColor: 'divider',
-          bgcolor: 'rgba(255, 255, 255, 0.96)',
+          color: '#FFFFFF',
+          bgcolor: barColor,
         }}
       >
         <Toolbar
           sx={{
-            display: 'grid',
-            gridTemplateColumns: '1fr auto 1fr',
-            gap: 2,
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 1.5,
+            justifyContent: 'space-between',
           }}
         >
           <Stack
             direction="row"
             spacing={2}
-            sx={{ alignItems: 'center', justifySelf: 'start' }}
+            sx={{ alignItems: 'center' }}
           >
-            <Typography
-              sx={{
-                display: { md: 'none', lg: 'block' },
-                color: 'primary.main',
-                fontSize: '1.1rem',
-                fontWeight: 800,
-                letterSpacing: '-0.02em',
-              }}
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{ alignItems: 'center' }}
             >
-              CampusGo
-            </Typography>
-            <ModeToggle mode={mode} onChange={handleModeChange} />
+              <Box
+                sx={{
+                  display: 'grid',
+                  width: 40,
+                  height: 40,
+                  placeItems: 'center',
+                  color: barColor,
+                  bgcolor: '#FFFFFF',
+                  borderRadius: 2,
+                }}
+              >
+                <CampusBuildingIcon />
+              </Box>
+              <Box sx={{ display: { md: 'none', lg: 'block' } }}>
+                <Typography
+                  sx={{
+                    color: '#FFFFFF',
+                    fontSize: '1.05rem',
+                    fontWeight: 800,
+                    lineHeight: 1.1,
+                  }}
+                >
+                  FoC
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.78)' }}>
+                  Friend of Campus
+                </Typography>
+              </Box>
+            </Stack>
+            <ModeToggle mode={mode} onChange={onModeChange} />
           </Stack>
 
-          <Stack direction="row" spacing={1}>
-            {navigationItems.map((item) => {
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{ flexWrap: 'wrap', justifyContent: 'center', flex: 1 }}
+          >
+            {visibleNavigationItems.map((item) => {
               const isActive = item.value === activeNavigationItem
 
               return (
@@ -184,10 +247,10 @@ function AppNavigation() {
                   component={Link}
                   to={item.to}
                   startIcon={<NavigationIcon path={item.path} />}
-                  variant={isActive ? 'contained' : 'text'}
-                  color={isActive ? 'primary' : 'inherit'}
+                  variant="text"
+                  sx={navButtonSx(isActive)}
                 >
-                  {item.label}
+                  {item.value === 'requests' ? requestLabel : item.label}
                 </Button>
               )
             })}
@@ -196,7 +259,15 @@ function AppNavigation() {
           <Button
             variant="outlined"
             onClick={handleLogout}
-            sx={{ justifySelf: 'end' }}
+            sx={{
+              flexShrink: 0,
+              color: '#FFFFFF',
+              borderColor: 'rgba(255, 255, 255, 0.55)',
+              '&:hover': {
+                borderColor: '#FFFFFF',
+                bgcolor: 'rgba(255, 255, 255, 0.1)',
+              },
+            }}
           >
             Logout
           </Button>
@@ -215,8 +286,8 @@ function AppNavigation() {
           zIndex: 1100,
           px: 1.5,
           py: 1,
-          borderBottom: 1,
-          borderColor: 'divider',
+          color: '#FFFFFF',
+          bgcolor: barColor,
         }}
       >
         <Stack spacing={1}>
@@ -224,27 +295,43 @@ function AppNavigation() {
             direction="row"
             sx={{ alignItems: 'center', justifyContent: 'space-between' }}
           >
-            <Typography
-              sx={{
-                color: 'primary.main',
-                fontSize: '1.05rem',
-                fontWeight: 800,
-              }}
-            >
-              CampusGo
-            </Typography>
+            <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+              <Box
+                sx={{
+                  display: 'grid',
+                  width: 32,
+                  height: 32,
+                  placeItems: 'center',
+                  color: barColor,
+                  bgcolor: '#FFFFFF',
+                  borderRadius: 1.5,
+                }}
+              >
+                <CampusBuildingIcon fontSize="small" />
+              </Box>
+              <Typography
+                sx={{
+                  color: '#FFFFFF',
+                  fontSize: '1.05rem',
+                  fontWeight: 800,
+                }}
+              >
+                FoC
+              </Typography>
+            </Stack>
             <IconButton
               aria-label="Open account actions"
               aria-haspopup="menu"
               aria-expanded={mobileMenuAnchor ? 'true' : undefined}
               onClick={(event) => setMobileMenuAnchor(event.currentTarget)}
+              sx={{ color: '#FFFFFF' }}
             >
               <SvgIcon aria-hidden="true">
                 <path d="M12 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
               </SvgIcon>
             </IconButton>
           </Stack>
-          <ModeToggle mode={mode} onChange={handleModeChange} />
+          <ModeToggle mode={mode} onChange={onModeChange} />
         </Stack>
       </Paper>
 
@@ -274,13 +361,24 @@ function AppNavigation() {
         <BottomNavigation
           showLabels
           value={activeNavigationItem}
+          sx={{
+            bgcolor: barColor,
+            '& .MuiBottomNavigationAction-root': {
+              color: 'rgba(255, 255, 255, 0.72)',
+              minWidth: 0,
+              px: 0.5,
+              '&.Mui-selected': {
+                color: '#FFFFFF',
+              },
+            },
+          }}
         >
-          {navigationItems.map((item) => (
+          {visibleNavigationItems.map((item) => (
             <BottomNavigationAction
               key={item.value}
               component={Link}
               to={item.to}
-              label={item.label}
+              label={item.value === 'requests' ? requestLabel : item.label}
               value={item.value}
               icon={<NavigationIcon path={item.path} />}
             />

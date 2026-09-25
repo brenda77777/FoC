@@ -7,6 +7,7 @@
 
 import { useState } from 'react'
 import {
+  Box,
   Button,
   Chip,
   Container,
@@ -20,15 +21,23 @@ import {
   Typography,
 } from '@mui/material'
 import { Link, useParams } from 'react-router-dom'
+import type { UserMode } from '../components/AppNavigation'
+import {
+  DeliveryBagIcon,
+  FoodIcon,
+  PrinterIcon,
+  StudentIcon,
+} from '../components/CampusArt'
 import SuccessSnackbar from '../components/SuccessSnackbar'
 import SupplierInfo from '../components/SupplierInfo'
 import { sampleSuppliers } from './SupplierListPage'
 
 type SupplierDetailPageProps = {
   isAdmin: boolean
+  mode: UserMode
 }
 
-function SupplierDetailPage({ isAdmin }: SupplierDetailPageProps) {
+function SupplierDetailPage({ isAdmin, mode }: SupplierDetailPageProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isSuccessOpen, setIsSuccessOpen] = useState(false)
 
@@ -95,6 +104,26 @@ function SupplierDetailPage({ isAdmin }: SupplierDetailPageProps) {
           }}
         >
           <Stack spacing={1.5}>
+            <Box
+              sx={{
+                display: 'grid',
+                height: 120,
+                placeItems: 'center',
+                borderRadius: 3,
+                color: supplier.type === 'Food' ? 'secondary.dark' : 'primary.dark',
+                bgcolor: supplier.type === 'Food' ? 'secondary.light' : 'primary.light',
+              }}
+            >
+              {supplier.type === 'Food' ? (
+                <FoodIcon sx={{ fontSize: 48 }} />
+              ) : supplier.type === 'Printing' ? (
+                <PrinterIcon sx={{ fontSize: 48 }} />
+              ) : supplier.type === 'Services' ? (
+                <StudentIcon sx={{ fontSize: 48 }} />
+              ) : (
+                <DeliveryBagIcon sx={{ fontSize: 48 }} />
+              )}
+            </Box>
             <Typography component="h1" variant="h4">
               {supplier.name}
             </Typography>
@@ -109,6 +138,16 @@ function SupplierDetailPage({ isAdmin }: SupplierDetailPageProps) {
               location={supplier.location}
               operatingHours={supplier.operatingHours}
             />
+            {mode === 'requester' && (
+              <Button
+                component={Link}
+                to={`/requests/new?supplierId=${supplier.id}`}
+                variant="contained"
+                sx={{ alignSelf: { xs: 'stretch', sm: 'flex-start' } }}
+              >
+                Create Request
+              </Button>
+            )}
           </Stack>
         </Paper>
       </Stack>

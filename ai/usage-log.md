@@ -329,9 +329,9 @@ Files affected:
 Author review:
 The output was reviewed and tested, and follow-up instructions were given where changes were needed.
 
-## CampusGo UI polish
-Date: 2026-09-19
-Time: 9:05 PM SGT
+## FoC polish
+Date: 2026-09-25
+Time: 9:35 AM SGT
 Tool: Cursor
 Model: GPT-5.6 Sol Medium
 
@@ -352,10 +352,10 @@ Exact prompt:
 > Preserve accessibility and responsive behaviour.
 
 Follow-up prompt:
-> Replace the current Home placeholder with a simple polished CampusGo dashboard.
+> Replace the current Home placeholder with a simple polished FoC dashboard.
 
 Key response:
-Added a CampusGo theme, polished navigation/cards, and replaced Home with a dashboard of quick-action cards.
+Added a FoC theme, polished navigation/cards, and replaced Home with a dashboard of quick-action cards.
 
 Files affected:
 - frontend/src/theme.ts
@@ -374,6 +374,47 @@ Files affected:
 
 Author review:
 The output was reviewed and tested, and follow-up instructions were given where changes were needed.
+
+## Interactive NUS campus map
+
+Date: 2026-09-25
+Time: 2.10 PM
+Tool: Cursor
+Model: GPT-5.6 Sol Medium
+
+Exact prompt:
+> Replace the current illustrated/static campus map with a real interactive NUS campus map.
+> Use Leaflet.js with OpenStreetMap tiles. Do NOT use a static image or custom-drawn fake map.
+> Requirements:
+> - The map should show the real NUS Kent Ridge + UTown geography.
+> - Users must be able to pan and zoom the map.
+> - Use Leaflet.js and react-leaflet.
+> - Use OpenStreetMap tiles.
+> - Add markers for NUS locations such as COM2, PGP, UTown, PC Commons, Central Library and University Hall.
+> - Store locations using latitude/longitude data.
+> - Clicking a marker should open a popup.
+> - Add a search box for NUS locations.
+> - Keep the map responsive on desktop and mobile.
+> - Do not hard-code marker positions using CSS percentages.
+
+Key response:
+Cursor replaced the previous static campus illustration with an interactive Leaflet map using OpenStreetMap tiles, added NUS location markers and search/reset controls, and simplified the map controls by removing the redundant Zoom out button.
+
+Packages installed:
+- leaflet
+- react-leaflet
+- @types/leaflet
+
+Files affected:
+- frontend/package.json
+- frontend/package-lock.json
+- frontend/src/components/CampusMap.tsx
+- frontend/src/data/nusLocations.ts
+- frontend/src/pages/HomePage.tsx
+
+Author review:
+The map was reviewed and tested locally. Follow-up instructions were used to simplify the controls and improve the UI.
+
 
 ## Development Guidance
 Tool: ChatGPT

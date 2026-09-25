@@ -21,10 +21,13 @@ import {
   Typography,
 } from '@mui/material'
 import { Link } from 'react-router-dom'
+import { CampusBuildingIcon, IconBadge } from '../components/CampusArt'
 import SupplierCard from '../components/SupplierCard'
 import SupplierListStatus from '../components/SupplierListStatus'
 
 // Temporary frontend-only data used while developing the page.
+// Shared with the supplier detail and edit pages while this stays frontend-only data.
+// eslint-disable-next-line react-refresh/only-export-components
 export const sampleSuppliers = [
   {
     id: 1,
@@ -46,9 +49,71 @@ export const sampleSuppliers = [
     type: 'Printing',
     location: 'COM1',
   },
+  {
+    id: 4,
+    name: 'Terrace Food Court',
+    type: 'Food',
+    location: 'Engineering',
+    operatingHours: 'Daily 8am - 8pm',
+  },
+  {
+    id: 5,
+    name: 'Spinelli Coffee',
+    type: 'Food',
+    location: 'COM1',
+    operatingHours: 'Daily 8am - 6pm',
+  },
+  {
+    id: 6,
+    name: 'Fine Food',
+    type: 'Food',
+    location: 'UTown',
+    operatingHours: 'Daily 7am - 10pm',
+  },
+  {
+    id: 7,
+    name: 'COM3 Print Hub',
+    type: 'Printing',
+    location: 'COM3',
+    operatingHours: 'Weekdays 9am - 6pm',
+  },
+  {
+    id: 8,
+    name: 'Engineering Plotter Room',
+    type: 'Printing',
+    location: 'Engineering',
+    operatingHours: 'Weekdays 9am - 6pm',
+  },
+  {
+    id: 9,
+    name: 'Central Library Printers',
+    type: 'Printing',
+    location: 'Central Library',
+  },
+  {
+    id: 10,
+    name: 'Cheers',
+    type: 'Convenience',
+    location: 'COM2',
+    operatingHours: 'Daily 8am - 10pm',
+  },
+  {
+    id: 11,
+    name: 'FairPrice Xpress',
+    type: 'Convenience',
+    location: 'UTown',
+    operatingHours: 'Daily 8am - 10pm',
+  },
+  {
+    id: 12,
+    name: 'Campus Services Desk',
+    type: 'Services',
+    location: 'COM1',
+    operatingHours: 'Weekdays 9am - 5pm',
+  },
 ]
 
-const itemsPerPage = 2
+const itemsPerPage = 6
 
 type SupplierListPageProps = {
   isAdmin: boolean
@@ -107,14 +172,19 @@ function SupplierListPage({ isAdmin }: SupplierListPageProps) {
             justifyContent: 'space-between',
           }}
         >
-          <Box>
-            <Typography component="h1" variant="h4">
-              Suppliers
-            </Typography>
-            <Typography color="text.secondary" sx={{ mt: 0.5 }}>
-              Find useful food, printing, and campus services.
-            </Typography>
-          </Box>
+          <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
+            <IconBadge tone="blue">
+              <CampusBuildingIcon />
+            </IconBadge>
+            <Box>
+              <Typography component="h1" variant="h4">
+                Suppliers
+              </Typography>
+              <Typography color="text.secondary" sx={{ mt: 0.25 }}>
+                Food, printing, and everyday campus services.
+              </Typography>
+            </Box>
+          </Stack>
           {isAdmin && (
             <Button
               component={Link}
@@ -129,7 +199,11 @@ function SupplierListPage({ isAdmin }: SupplierListPageProps) {
 
         <Paper
           variant="outlined"
-          sx={{ p: { xs: 2, md: 2.5 }, borderColor: 'divider' }}
+          sx={{
+            p: { xs: 2, md: 2.5 },
+            borderColor: 'divider',
+            bgcolor: 'background.paper',
+          }}
         >
           <Stack spacing={2}>
             <TextField
@@ -178,11 +252,21 @@ function SupplierListPage({ isAdmin }: SupplierListPageProps) {
           </Stack>
         </Paper>
 
-        <Box aria-label="Supplier results" sx={{ minHeight: { xs: 320, md: 480 } }}>
+        <Box aria-label="Supplier results">
+          {listPreviewState === 'ready' && sortedSuppliers.length > 0 && (
+            <Typography color="text.secondary" sx={{ mb: 1.5 }}>
+              Showing {paginatedSuppliers.length} of {sortedSuppliers.length}{' '}
+              supplier{sortedSuppliers.length === 1 ? '' : 's'}
+            </Typography>
+          )}
           <Box
             sx={{
               display: 'grid',
-              gridTemplateColumns: { xs: '1fr', lg: 'repeat(2, minmax(0, 1fr))' },
+              gridTemplateColumns: {
+                xs: '1fr',
+                md: 'repeat(2, minmax(0, 1fr))',
+                lg: 'repeat(3, minmax(0, 1fr))',
+              },
               gap: { xs: 2, md: 3 },
             }}
           >

@@ -22,7 +22,7 @@ const theme = createTheme({
       contrastText: '#FFFFFF',
     },
     background: {
-      default: '#F5F7F8',
+      default: '#F3F5F7',
       paper: '#FFFFFF',
     },
     text: {
@@ -37,6 +37,10 @@ const theme = createTheme({
   typography: {
     fontFamily:
       "Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    h3: {
+      fontWeight: 750,
+      letterSpacing: '-0.03em',
+    },
     h4: {
       fontWeight: 700,
       letterSpacing: '-0.025em',
@@ -55,6 +59,16 @@ const theme = createTheme({
     },
   },
   components: {
+    MuiButtonBase: {
+      styleOverrides: {
+        root: {
+          '&.Mui-focusVisible': {
+            outline: '2px solid #173F5F',
+            outlineOffset: 2,
+          },
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
@@ -65,7 +79,7 @@ const theme = createTheme({
         },
         contained: {
           '&:hover': {
-            boxShadow: '0 4px 12px rgba(23, 63, 95, 0.18)',
+            boxShadow: '0 8px 18px rgba(23, 63, 95, 0.22)',
           },
         },
       },

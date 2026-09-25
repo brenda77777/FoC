@@ -14,93 +14,169 @@ import {
   Chip,
   Container,
   Stack,
-  SvgIcon,
   Typography,
 } from '@mui/material'
 import { Link } from 'react-router-dom'
+import type { UserMode } from '../components/AppNavigation'
+import {
+  CheckTaskIcon,
+  ClipboardIcon,
+  DeliveryBagIcon,
+  IconBadge,
+  StudentIcon,
+} from '../components/CampusArt'
+import CampusMap from '../components/CampusMap'
 
-const quickActions = [
+const requesterQuickActions = [
   {
     title: 'Browse Suppliers',
     description: 'Find food, printing, and other useful campus services.',
     to: '/suppliers',
-    iconPath:
-      'M4 4h16v2H4V4Zm-1 4h18l-1 5H4L3 8Zm2 7h14v6H5v-6Zm3 2v2h3v-2H8Z',
+    icon: <DeliveryBagIcon />,
   },
   {
     title: 'My Requests',
     description: 'Order-related request tracking is under development.',
     to: '/requests',
     underDevelopment: true,
-    iconPath:
-      'M19 3h-4.18A3 3 0 0 0 9.18 3H5a2 2 0 0 0-2 2v16h18V5a2 2 0 0 0-2-2Zm-7-1a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm3 15H7v-2h8v2Zm2-4H7v-2h10v2Zm0-4H7V7h10v2Z',
+    icon: <ClipboardIcon />,
   },
   {
     title: 'Account',
-    description: 'Review your profile and available CampusGo roles.',
+    description: 'Review your profile and available FoC roles.',
     to: '/account',
-    iconPath:
-      'M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-5.52 0-10 2.24-10 5v3h20v-3c0-2.76-4.48-5-10-5Z',
+    icon: <StudentIcon />,
   },
 ]
 
-function HomePage() {
+const courierQuickActions = [
+  {
+    title: 'Fulfil Requests',
+    description: 'Open campus errand requests available for you to accept.',
+    to: '/requests',
+    underDevelopment: true,
+    icon: <ClipboardIcon />,
+  },
+  {
+    title: 'My Tasks',
+    description: 'Track accepted courier requests you are currently handling.',
+    to: '/my-tasks',
+    underDevelopment: true,
+    icon: <CheckTaskIcon />,
+  },
+  {
+    title: 'Account',
+    description: 'Review your profile and available FoC roles.',
+    to: '/account',
+    icon: <StudentIcon />,
+  },
+]
+
+type HomePageProps = {
+  mode: UserMode
+}
+
+function HomePage({ mode }: HomePageProps) {
+  const isCourier = mode === 'courier'
+  const tone = isCourier ? 'teal' : 'blue'
+  const quickActions = isCourier ? courierQuickActions : requesterQuickActions
+
   return (
-    <Container component="main" maxWidth="lg" sx={{ py: { xs: 3, md: 6 } }}>
-      <Stack spacing={{ xs: 3, md: 4 }}>
-        <Stack spacing={0.5}>
-          <Typography component="h1" variant="h4">
-            Welcome to CampusGo
-          </Typography>
-          <Typography color="text.secondary">
-            Browse campus services and access your requester or courier tools.
-          </Typography>
-        </Stack>
+    <Container component="main" maxWidth="lg" sx={{ py: { xs: 3, md: 5 } }}>
+      <Stack spacing={{ xs: 2.5, md: 3.5 }}>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: '1fr',
+            gap: { xs: 2, md: 3 },
+            overflow: 'hidden',
+            p: { xs: 2.5, md: 4 },
+            borderRadius: 4,
+            color: '#FFFFFF',
+            background: isCourier
+              ? 'linear-gradient(135deg, #0F4743 0%, #145E59 48%, #1F8A80 100%)'
+              : 'linear-gradient(135deg, #0C2436 0%, #12324C 48%, #1E5680 100%)',
+            boxShadow: '0 18px 40px rgba(18, 35, 48, 0.22)',
+          }}
+        >
+          <Stack spacing={1.5}>
+            <Typography
+              variant="overline"
+              sx={{ fontWeight: 800, letterSpacing: '0.12em', color: isCourier ? '#B7E6DF' : '#C5DDF0' }}
+            >
+              Friend of Campus
+            </Typography>
+            <Typography component="h1" variant="h3" sx={{ fontWeight: 750, letterSpacing: '-0.03em', color: '#FFFFFF' }}>
+              {isCourier ? (
+                <>
+                  Accept and{' '}
+                  <Box component="span" sx={{ color: '#B7E6DF' }}>complete</Box>{' '}
+                  campus errands
+                </>
+              ) : (
+                <>
+                  Create and{' '}
+                  <Box component="span" sx={{ color: '#C5DDF0' }}>track</Box>{' '}
+                  campus errands
+                </>
+              )}
+            </Typography>
+            <Typography sx={{ maxWidth: 520, fontSize: '1.05rem', color: 'rgba(255,255,255,0.86)' }}>
+              {isCourier
+                ? 'Pick up open requests and finish the ones you are already handling.'
+                : 'Send a campus errand, then follow it from pickup to confirmed delivery.'}
+            </Typography>
+            <Chip
+              label={isCourier ? 'Courier mode' : 'Requester mode'}
+              sx={{
+                alignSelf: 'flex-start',
+                mt: 0.5,
+                color: '#FFFFFF',
+                bgcolor: 'rgba(255,255,255,0.16)',
+                border: '1px solid rgba(255,255,255,0.28)',
+              }}
+            />
+          </Stack>
+          <CampusMap />
+        </Box>
 
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: {
-              xs: '1fr',
-              md: 'repeat(3, minmax(0, 1fr))',
-            },
-            gap: { xs: 2, md: 3 },
+            gridTemplateColumns: { xs: '1fr', md: 'repeat(3, minmax(0, 1fr))' },
+            gap: { xs: 2, md: 2.5 },
           }}
         >
-          {quickActions.map((action, index) => (
+          {quickActions.map((action) => (
             <Card
-              key={action.to}
+              key={action.title}
               variant="outlined"
               sx={{
                 height: '100%',
                 borderColor: 'divider',
-                boxShadow: '0 8px 24px rgba(23, 35, 45, 0.05)',
+                bgcolor: 'background.paper',
+                boxShadow: '0 12px 28px rgba(18, 35, 48, 0.1)',
+                transition: 'transform 160ms ease, box-shadow 160ms ease',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: '0 18px 36px rgba(18, 35, 48, 0.16)',
+                },
               }}
             >
               <CardActionArea
                 component={Link}
                 to={action.to}
-                sx={{ height: '100%', p: 0.5 }}
+                sx={{ height: '100%' }}
               >
-                <CardContent>
+                <Box
+                  sx={{
+                    height: 6,
+                    bgcolor: isCourier ? 'secondary.main' : 'primary.main',
+                  }}
+                />
+                <CardContent sx={{ p: 2.5 }}>
                   <Stack spacing={2}>
-                    <Box
-                      sx={{
-                        display: 'grid',
-                        width: 48,
-                        height: 48,
-                        placeItems: 'center',
-                        color: index === 1 ? 'secondary.main' : 'primary.main',
-                        bgcolor:
-                          index === 1 ? 'secondary.light' : 'primary.light',
-                        borderRadius: 2.5,
-                      }}
-                    >
-                      <SvgIcon aria-hidden="true">
-                        <path d={action.iconPath} />
-                      </SvgIcon>
-                    </Box>
-
+                    <IconBadge tone={tone}>{action.icon}</IconBadge>
                     <Stack spacing={0.75}>
                       <Typography component="h2" variant="h6">
                         {action.title}
@@ -109,7 +185,6 @@ function HomePage() {
                         {action.description}
                       </Typography>
                     </Stack>
-
                     {action.underDevelopment && (
                       <Chip
                         label="Under development"
@@ -126,7 +201,7 @@ function HomePage() {
           ))}
         </Box>
 
-        <Alert severity="info" variant="outlined">
+        <Alert severity="info" variant="outlined" sx={{ bgcolor: 'background.paper' }}>
           Order-related workflows are still under development.
         </Alert>
       </Stack>

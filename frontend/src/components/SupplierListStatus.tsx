@@ -5,7 +5,8 @@
  * Author review: The generated code was reviewed, tested, and iteratively refined by the author through follow-up instructions.
  */
 
-import { Alert, Box, CircularProgress, Stack, Typography } from '@mui/material'
+import { Alert, Box, CircularProgress, Paper, Stack, Typography } from '@mui/material'
+import { CampusBuildingIcon } from './CampusArt'
 
 export type SupplierListStatusType =
   | 'loading'
@@ -39,16 +40,20 @@ function SupplierListStatus({ status }: SupplierListStatusProps) {
 
   if (status === 'empty') {
     return (
-      <Alert severity="info">
-        No suppliers are available yet.
-      </Alert>
+      <Paper variant="outlined" sx={{ p: 3, textAlign: 'center', bgcolor: 'background.paper' }}>
+        <CampusBuildingIcon sx={{ fontSize: 40, color: 'primary.main' }} />
+        <Typography sx={{ mt: 1 }}>No suppliers are available yet.</Typography>
+      </Paper>
     )
   }
 
   return (
-    <Alert severity="info">
-      No suppliers found. Try changing your search or supplier type.
-    </Alert>
+    <Paper variant="outlined" sx={{ p: 3, textAlign: 'center', bgcolor: 'background.paper' }}>
+      <CampusBuildingIcon sx={{ fontSize: 40, color: 'primary.main' }} />
+      <Typography sx={{ mt: 1 }}>
+        No suppliers found. Try changing your search or supplier type.
+      </Typography>
+    </Paper>
   )
 }
 

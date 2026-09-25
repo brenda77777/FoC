@@ -17,6 +17,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
+import { IconBadge, StudentIcon } from '../components/CampusArt'
 
 const temporaryProfile = {
   username: 'sample.user',
@@ -71,14 +72,19 @@ function AccountPage() {
             justifyContent: 'space-between',
           }}
         >
-          <Box>
-            <Typography component="h1" variant="h4">
-              Account
-            </Typography>
-            <Typography color="text.secondary" sx={{ mt: 0.5 }}>
-              Manage your profile and view your available roles.
-            </Typography>
-          </Box>
+          <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
+            <IconBadge tone="blue">
+              <StudentIcon />
+            </IconBadge>
+            <Box>
+              <Typography component="h1" variant="h4">
+                Account
+              </Typography>
+              <Typography color="text.secondary" sx={{ mt: 0.25 }}>
+                Manage your profile and view your available roles.
+              </Typography>
+            </Box>
+          </Stack>
 
           {!isEditing && (
             <Button
@@ -192,7 +198,7 @@ function AccountPage() {
             </Typography>
             <Stack direction="row" spacing={1}>
               <Chip label="Requester" color="primary" variant="outlined" />
-              <Chip label="Courier" color="primary" variant="outlined" />
+              <Chip label="Courier" color="secondary" variant="outlined" />
             </Stack>
             <Typography variant="body2" color="text.secondary">
               Roles are managed by the system and cannot be edited here.

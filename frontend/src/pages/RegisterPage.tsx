@@ -17,6 +17,7 @@ import {
   Typography,
 } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
+import { CampusScene } from '../components/CampusArt'
 
 const allowedEmailDomains = [
   '@u.nus.edu',
@@ -79,19 +80,26 @@ function RegisterPage() {
   }
 
   return (
-    <Container component="main" maxWidth="sm" sx={{ py: { xs: 3, md: 6 } }}>
-      <Stack spacing={3}>
-        <Box>
+    <Container component="main" maxWidth="md" sx={{ py: { xs: 3, md: 6 } }}>
+      <Stack
+        direction={{ xs: 'column', md: 'row' }}
+        spacing={3}
+        sx={{ alignItems: 'flex-start' }}
+      >
+        <Box sx={{ flex: { md: '0 0 280px' }, width: '100%' }}>
+          <CampusScene tone="teal" />
           <Typography
             color="secondary.main"
             variant="overline"
             sx={{
+              mt: 1.5,
+              display: 'block',
               fontWeight: 800,
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
             }}
           >
-            CampusGo
+            Friend of Campus
           </Typography>
           <Typography component="h1" variant="h4">
             Register
@@ -104,8 +112,12 @@ function RegisterPage() {
         <Paper
           variant="outlined"
           sx={{
+            flex: 1,
+            width: '100%',
+            minWidth: 0,
             p: { xs: 2.5, md: 3.5 },
             borderColor: 'divider',
+            bgcolor: 'background.paper',
             boxShadow: '0 12px 34px rgba(23, 35, 45, 0.07)',
           }}
         >

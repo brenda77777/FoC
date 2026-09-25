@@ -5,6 +5,7 @@
  * Author review: The generated code was reviewed, tested, and iteratively refined by the author through follow-up instructions.
  */
 
+import type { ReactNode } from 'react'
 import {
   Box,
   Button,
@@ -14,10 +15,15 @@ import {
   CardMedia,
   Chip,
   Stack,
-  SvgIcon,
   Typography,
 } from '@mui/material'
 import { Link } from 'react-router-dom'
+import {
+  DeliveryBagIcon,
+  FoodIcon,
+  PrinterIcon,
+  StudentIcon,
+} from './CampusArt'
 import SupplierInfo from './SupplierInfo'
 
 // These props describe the supplier information that the card accepts.
@@ -31,6 +37,38 @@ type SupplierCardProps = {
   imageUrl?: string
 }
 
+const placeholderByType: Record<
+  string,
+  { icon: ReactNode; wash: string; ink: string }
+> = {
+  Food: {
+    icon: <FoodIcon sx={{ fontSize: 56 }} />,
+    wash: 'linear-gradient(145deg, #146E62 0%, #3EAEA0 100%)',
+    ink: '#146E62',
+  },
+  Printing: {
+    icon: <PrinterIcon sx={{ fontSize: 56 }} />,
+    wash: 'linear-gradient(145deg, #12324C 0%, #2E6F9E 100%)',
+    ink: '#12324C',
+  },
+  Convenience: {
+    icon: <DeliveryBagIcon sx={{ fontSize: 56 }} />,
+    wash: 'linear-gradient(145deg, #7A5428 0%, #C9924A 100%)',
+    ink: '#7A5428',
+  },
+  Services: {
+    icon: <StudentIcon sx={{ fontSize: 56 }} />,
+    wash: 'linear-gradient(145deg, #31404C 0%, #6E8496 100%)',
+    ink: '#31404C',
+  },
+}
+
+const defaultPlaceholder = {
+  icon: <DeliveryBagIcon sx={{ fontSize: 56 }} />,
+  wash: 'linear-gradient(145deg, #12324C 0%, #2E6F9E 100%)',
+  ink: '#12324C',
+}
+
 function SupplierCard({
   id,
   name,
@@ -39,21 +77,23 @@ function SupplierCard({
   operatingHours,
   imageUrl,
 }: SupplierCardProps) {
+  const placeholder = placeholderByType[type] ?? defaultPlaceholder
+
   return (
     <Card
       variant="outlined"
       sx={{
-        display: { xs: 'block', sm: 'flex' },
-        width: '100%',
-        maxWidth: 'none',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
         overflow: 'hidden',
         borderColor: 'divider',
-        borderRadius: 3,
-        boxShadow: '0 8px 24px rgba(23, 35, 45, 0.06)',
+        bgcolor: 'background.paper',
+        boxShadow: '0 12px 28px rgba(18, 35, 48, 0.1)',
         transition: 'transform 160ms ease, box-shadow 160ms ease',
         '&:hover': {
-          transform: 'translateY(-2px)',
-          boxShadow: '0 12px 30px rgba(23, 35, 45, 0.1)',
+          transform: 'translateY(-4px)',
+          boxShadow: '0 18px 36px rgba(18, 35, 48, 0.16)',
         },
       }}
     >
@@ -62,61 +102,63 @@ function SupplierCard({
           component="img"
           image={imageUrl}
           alt={name}
-          sx={{ width: { xs: '100%', sm: 200 }, height: { xs: 180, sm: 'auto' } }}
+          sx={{ height: 148 }}
         />
       ) : (
         <Box
           role="img"
           aria-label={`${name} placeholder image`}
           sx={{
+            position: 'relative',
             display: 'grid',
-            width: { xs: '100%', sm: 200 },
-            height: { xs: 180, sm: 'auto' },
-            minHeight: { sm: 180 },
-            flexShrink: 0,
+            height: 148,
             placeItems: 'center',
-            color: 'primary.main',
-            background:
-              'linear-gradient(145deg, rgba(23, 63, 95, 0.08), rgba(42, 127, 122, 0.14))',
+            color: '#FFFFFF',
+            background: placeholder.wash,
+            overflow: 'hidden',
+            '&::before, &::after': {
+              content: '""',
+              position: 'absolute',
+              borderRadius: '50%',
+              bgcolor: 'rgba(255,255,255,0.16)',
+            },
+            '&::before': { width: 92, height: 92, top: -24, right: -16 },
+            '&::after': { width: 56, height: 56, bottom: -12, left: 16 },
           }}
         >
-          <SvgIcon sx={{ fontSize: 56 }} aria-hidden="true">
-            <path d="M4 4h16v2H4V4Zm-1 4h18l-1 5H4L3 8Zm2 7h14v6H5v-6Zm3 2v2h3v-2H8Z" />
-          </SvgIcon>
+          <Box sx={{ position: 'relative', zIndex: 1 }}>{placeholder.icon}</Box>
         </Box>
       )}
 
-      <Box sx={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-        <CardContent sx={{ flex: 1, p: { xs: 2, md: 2.5 } }}>
-          <Stack spacing={1.5}>
-            <Typography component="h2" variant="h5" sx={{ fontWeight: 600 }}>
-              {name}
-            </Typography>
-            <Chip
-              label={type}
-              size="small"
-              color={type === 'Food' ? 'secondary' : 'primary'}
-              variant="outlined"
-              sx={{ alignSelf: 'flex-start' }}
-            />
-            <SupplierInfo
-              location={location}
-              operatingHours={operatingHours}
-            />
-          </Stack>
-        </CardContent>
+      <CardContent sx={{ flex: 1, p: 2.25 }}>
+        <Stack spacing={1.25}>
+          <Chip
+            label={type}
+            size="small"
+            variant="outlined"
+            sx={{
+              alignSelf: 'flex-start',
+              color: placeholder.ink,
+              borderColor: placeholder.ink,
+            }}
+          />
+          <Typography component="h2" variant="h6">
+            {name}
+          </Typography>
+          <SupplierInfo location={location} operatingHours={operatingHours} />
+        </Stack>
+      </CardContent>
 
-        <CardActions sx={{ px: { xs: 2, md: 2.5 }, pb: { xs: 2, md: 2.5 } }}>
-          <Button
-            component={Link}
-            to={`/suppliers/${id}`}
-            variant="contained"
-            sx={{ width: { xs: '100%', sm: 'auto' } }}
-          >
-            View Details
-          </Button>
-        </CardActions>
-      </Box>
+      <CardActions sx={{ px: 2.25, pb: 2.25 }}>
+        <Button
+          component={Link}
+          to={`/suppliers/${id}`}
+          variant="contained"
+          fullWidth
+        >
+          View Details
+        </Button>
+      </CardActions>
     </Card>
   )
 }
