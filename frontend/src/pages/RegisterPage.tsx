@@ -112,8 +112,8 @@ function RegisterPage() {
             py: { xs: 4, md: 5 },
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between',
-            gap: { xs: 3, md: 4 },
+            justifyContent: 'flex-start',
+            gap: 3,
           }}
         >
           <Box>
@@ -134,7 +134,7 @@ function RegisterPage() {
             sx={{
               width: '100%',
               height: 'auto',
-              p: { xs: 1.25, md: 1.5 },
+              p: { xs: 1.25, md: 1.75 },
               borderRadius: 2,
               bgcolor: '#FFFFFF',
             }}

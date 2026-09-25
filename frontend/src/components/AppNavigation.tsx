@@ -188,7 +188,11 @@ function AppNavigation({ mode, onModeChange }: AppNavigationProps) {
             display: 'flex',
             flexWrap: 'wrap',
             gap: 1.5,
+            height: 'auto',
+            minHeight: 64,
+            py: 1,
             justifyContent: 'space-between',
+            overflow: 'visible',
           }}
         >
           <Stack
@@ -236,7 +240,7 @@ function AppNavigation({ mode, onModeChange }: AppNavigationProps) {
           <Stack
             direction="row"
             spacing={1}
-            sx={{ flexWrap: 'wrap', justifyContent: 'center', flex: 1 }}
+            sx={{ flex: '1 1 280px', flexWrap: 'wrap', justifyContent: 'flex-end', minWidth: 0 }}
           >
             {visibleNavigationItems.map((item) => {
               const isActive = item.value === activeNavigationItem
@@ -254,23 +258,22 @@ function AppNavigation({ mode, onModeChange }: AppNavigationProps) {
                 </Button>
               )
             })}
+            <Button
+              variant="outlined"
+              onClick={handleLogout}
+              sx={{
+                flex: '0 0 auto',
+                color: '#FFFFFF',
+                borderColor: 'rgba(255, 255, 255, 0.55)',
+                '&:hover': {
+                  borderColor: '#FFFFFF',
+                  bgcolor: 'rgba(255, 255, 255, 0.1)',
+                },
+              }}
+            >
+              Logout
+            </Button>
           </Stack>
-
-          <Button
-            variant="outlined"
-            onClick={handleLogout}
-            sx={{
-              flexShrink: 0,
-              color: '#FFFFFF',
-              borderColor: 'rgba(255, 255, 255, 0.55)',
-              '&:hover': {
-                borderColor: '#FFFFFF',
-                bgcolor: 'rgba(255, 255, 255, 0.1)',
-              },
-            }}
-          >
-            Logout
-          </Button>
         </Toolbar>
       </AppBar>
 
